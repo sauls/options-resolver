@@ -12,7 +12,9 @@
 
 namespace Sauls\Component\OptionsResolver;
 
+use function Sauls\Component\Helper\array_key_childs_exist;
 use function Sauls\Component\Helper\array_keys_with_value;
+use function Sauls\Component\Helper\array_remove_key;
 use Symfony\Component\OptionsResolver\OptionsResolver as SymfonyOptionsResolver;
 use Sauls\Component\Collection\ArrayCollection;
 
@@ -33,10 +35,21 @@ class OptionsResolver extends SymfonyOptionsResolver
     public function resolve(array $options = []): array
     {
         return (new ArrayCollection(
-            parent::resolve(
-                array_keys_with_value($options)
+            $this->processDotNotatedValues(
+                parent::resolve(array_keys_with_value($options))
             )
         ))->all();
+    }
+
+    private function processDotNotatedValues(array $resolvedValues): array
+    {
+        foreach ($resolvedValues as $key => $value) {
+            if (array_key_childs_exist($key, $resolvedValues)) {
+                array_remove_key($resolvedValues, $key);
+            }
+        }
+
+        return $resolvedValues;
     }
 
 }
