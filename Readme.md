@@ -1,11 +1,11 @@
 # Sauls OptionsResolver
 
 [![Build Status](https://travis-ci.org/sauls/options-resolver.svg?branch=master)](https://travis-ci.org/sauls/options-resolver)
-[![Latest Stable Version](https://poser.pugx.org/sauls/options-resolver/v/stable)](https://packagist.org/packages/sauls/options-resolver)
-[![Total Downloads](https://poser.pugx.org/sauls/options-resolver/downloads)](https://packagist.org/packages/sauls/options-resolver)
-[![Coverage Status](https://coveralls.io/repos/github/sauls/options-resolver/badge.svg?branch=master)](https://coveralls.io/github/sauls/options-resolver?branch=master)
+[![Packagist](https://img.shields.io/packagist/v/sauls/options-resolver.svg)](https://packagist.org/packages/sauls/options-resolver)
+[![Total Downloads](https://img.shields.io/packagist/dt/sauls/options-resolver.svg)](https://packagist.org/packages/sauls/options-resolver)
+[![Coverage Status](https://img.shields.io/coveralls/github/sauls/options-resolver.svg)](https://coveralls.io/github/sauls/options-resolver?branch=master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/sauls/options-resolver/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/sauls/options-resolver/?branch=master)
-[![License](https://poser.pugx.org/sauls/options-resolver/license)](https://packagist.org/packages/sauls/options-resolver)
+[![License](https://img.shields.io/github/license/sauls/options-resolver.svg)](https://packagist.org/packages/sauls/options-resolver)
 
 [Symfony OptionsResolver](https://symfony.com/doc/current/components/options_resolver.html) with multi dimensional array support
 

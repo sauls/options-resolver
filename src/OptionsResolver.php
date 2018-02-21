@@ -12,33 +12,29 @@
 
 namespace Sauls\Component\OptionsResolver;
 
-use function Sauls\Component\Helper\array_key_assoc_with_value;
-use Sauls\Component\Collection\ArrayCollection;
+use function Sauls\Component\Helper\array_keys_with_value;
 use Symfony\Component\OptionsResolver\OptionsResolver as SymfonyOptionsResolver;
+use Sauls\Component\Collection\ArrayCollection;
 
 class OptionsResolver extends SymfonyOptionsResolver
 {
     /**
      * @throws \Symfony\Component\OptionsResolver\Exception\AccessException
+     * @throws \Exception
      */
     public function setDefaults(array $defaults)
     {
-        return parent::setDefaults(array_key_assoc_with_value($defaults));
+        return parent::setDefaults(array_keys_with_value($defaults));
     }
 
     /**
-     * @throws \Symfony\Component\OptionsResolver\Exception\UndefinedOptionsException
-     * @throws \Symfony\Component\OptionsResolver\Exception\OptionDefinitionException
-     * @throws \Symfony\Component\OptionsResolver\Exception\NoSuchOptionException
-     * @throws \Symfony\Component\OptionsResolver\Exception\MissingOptionsException
-     * @throws \Symfony\Component\OptionsResolver\Exception\InvalidOptionsException
-     * @throws \Symfony\Component\OptionsResolver\Exception\AccessException
+     * @throws \Exception
      */
     public function resolve(array $options = []): array
     {
         return (new ArrayCollection(
             parent::resolve(
-                array_key_assoc_with_value($options)
+                array_keys_with_value($options)
             )
         ))->all();
     }
