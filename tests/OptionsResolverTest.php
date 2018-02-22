@@ -22,12 +22,7 @@ use Symfony\Component\OptionsResolver\Options;
 
 class OptionsResolverTest extends TestCase
 {
-    protected  $resolver;
-
-    protected function setUp()
-    {
-        $this->resolver = new OptionsResolver();
-    }
+    protected $resolver;
 
     /**
      * @test
@@ -48,11 +43,11 @@ class OptionsResolverTest extends TestCase
             'a' => 2,
             'x' => [
                 'y' => 25,
-            ]
+            ],
         ], $this->resolver->resolve([
             'x' => [
                 'y' => 25,
-            ]
+            ],
         ]));
     }
 
@@ -65,10 +60,10 @@ class OptionsResolverTest extends TestCase
         $this->expectExceptionMessage('The required option "nested.value" is missing.');
         $this->resolver->setRequired(['nested.name', 'nested.value']);
 
-        $array = $this->resolver->resolve([
+        $this->resolver->resolve([
             'nested' => [
                 'name' => 'test',
-            ]
+            ],
         ]);
     }
 
@@ -86,7 +81,7 @@ class OptionsResolverTest extends TestCase
             'nested' => [
                 'name' => 'test',
                 'value' => 'wrong',
-            ]
+            ],
         ]);
     }
 
@@ -104,14 +99,14 @@ class OptionsResolverTest extends TestCase
             ->setDefaults([
                 'nested' => [
                     'name' => 'test options',
-                    'value' => 25
-                ]
+                    'value' => 25,
+                ],
             ]);
 
         $this->resolver->resolve([
             'nested' => [
                 'type' => 'four',
-            ]
+            ],
         ]);
     }
 
@@ -126,20 +121,19 @@ class OptionsResolverTest extends TestCase
             ->setDefaults([
                 'nested' => [
                     'name' => 'test options',
-                    'value' => 25
-                ]
+                    'value' => 25,
+                ],
             ])
-            ->setNormalizer('nested.type', function(Options $options, $value) {
+            ->setNormalizer('nested.type', function (Options $options, $value) {
                 $valueMap = ['zero', 'one', 'two', 'three'];
 
                 return \array_key_exists($value, $valueMap) ? $valueMap[$value] : 'unknown';
-            })
-        ;
+            });
 
         $resolvedOptions = $this->resolver->resolve([
             'nested' => [
                 'type' => 2,
-            ]
+            ],
         ]);
 
         $this->assertSame([
@@ -147,7 +141,7 @@ class OptionsResolverTest extends TestCase
                 'name' => 'test options',
                 'value' => 25,
                 'type' => 'two',
-            ]
+            ],
         ], $resolvedOptions);
     }
 
@@ -165,7 +159,7 @@ class OptionsResolverTest extends TestCase
         $this->assertSame([
             'nested' => [
                 'name' => 'test options',
-                'value' => 25
+                'value' => 25,
             ],
         ], $this->resolver->resolve([]));
 
@@ -174,12 +168,12 @@ class OptionsResolverTest extends TestCase
                 'nested' => [
                     'value' => 25,
                     'name' => 'tada!',
-                ]
-        ], $this->resolver->resolve(
+                ],
+            ], $this->resolver->resolve(
             [
                 'nested' => [
-                    'name' => 'tada!'
-                ]
+                    'name' => 'tada!',
+                ],
             ]
         ));
 
@@ -188,7 +182,7 @@ class OptionsResolverTest extends TestCase
                 'nested' => [
                     'name' => 'works!',
                     'value' => 100,
-                ]
+                ],
             ], $this->resolver->resolve(
             [
                 'nested.name' => 'works!',
@@ -212,8 +206,8 @@ class OptionsResolverTest extends TestCase
             ->setDefaults([
                 'nested' => [
                     'name' => 'test options',
-                    'value' => 25
-                ]
+                    'value' => 25,
+                ],
             ]);
 
         $this->resolver->resolve([
@@ -221,7 +215,71 @@ class OptionsResolverTest extends TestCase
                 'deep' => [
                     'nmae' => 'Hello!',
                 ],
-            ]
+            ],
         ]);
+    }
+
+    /**
+     * @test
+     */
+    public function should_not_overwrite_associative_array_when_associative_array_elements_exist(): void
+    {
+        $this->resolver
+            ->setDefined(['person', 'person.name', 'person.lastname'])
+            ->addAllowedTypes('person', ['array'])
+            ->addAllowedTypes('person.name', ['string'])
+            ->addAllowedTypes('person.lastname', ['string'])
+            ->setDefaults([
+                'person' => [],
+                'person.name' => 'noname',
+                'person.lastname' => 'nolastname',
+            ]);
+
+        $this->assertSame([
+            'person' => [
+                'name' => 'John',
+                'lastname' => 'Doe',
+            ],
+        ], $this->resolver->resolve(
+            [
+                'person' => [
+                    'name' => 'John',
+                    'lastname' => 'Doe',
+                ],
+            ]
+        ));
+    }
+
+    /**
+     * @test
+     */
+    public function should_throw_exception_when_associative_array_elements_are_not_defined_does_not_exist(): void
+    {
+        $this->expectException(UndefinedOptionsException::class);
+        $this->expectExceptionMessage('The option "person.0" does not exist. Defined options are: "person".');
+        $this->resolver
+            ->setDefined(['person'])
+            ->addAllowedTypes('person', ['array'])
+            ->setDefaults([
+                'person' => [],
+            ]);
+
+        $this->assertSame([
+            'person' => [
+                'novalue',
+            ],
+        ], $this->resolver->resolve(
+            [
+                'person' => [
+                    'novalue',
+                ],
+            ]
+        ));
+
+    }
+
+    protected function setUp()
+    {
+        $this->resolver = new OptionsResolver();
     }
 }
