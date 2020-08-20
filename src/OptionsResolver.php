@@ -12,17 +12,20 @@
 
 namespace Sauls\Component\OptionsResolver;
 
+use Exception;
+use Sauls\Component\Collection\ArrayCollection;
+use Symfony\Component\OptionsResolver\Exception\AccessException;
+use Symfony\Component\OptionsResolver\OptionsResolver as SymfonyOptionsResolver;
+
 use function Sauls\Component\Helper\array_key_childs_exist;
 use function Sauls\Component\Helper\array_keys_with_value;
 use function Sauls\Component\Helper\array_remove_key;
-use Symfony\Component\OptionsResolver\OptionsResolver as SymfonyOptionsResolver;
-use Sauls\Component\Collection\ArrayCollection;
 
 class OptionsResolver extends SymfonyOptionsResolver
 {
     /**
-     * @throws \Symfony\Component\OptionsResolver\Exception\AccessException
-     * @throws \Exception
+     * @throws AccessException
+     * @throws Exception
      */
     public function setDefaults(array $defaults)
     {
@@ -30,7 +33,7 @@ class OptionsResolver extends SymfonyOptionsResolver
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function resolve(array $options = []): array
     {
@@ -51,5 +54,4 @@ class OptionsResolver extends SymfonyOptionsResolver
 
         return $resolvedValues;
     }
-
 }
