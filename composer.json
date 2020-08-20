@@ -10,12 +10,12 @@
     }
   ],
   "require": {
-    "php": ">=7.2",
+    "php": ">=7.4",
     "sauls/collections": "^1.0",
-    "symfony/options-resolver": "^4.0"
+    "symfony/options-resolver": "^4.0 || ^5.0"
   },
   "require-dev": {
-    "phpunit/phpunit": "^7.0",
+    "phpunit/phpunit": "^9.0",
     "php-coveralls/php-coveralls": "^2.0"
   },
   "autoload": {
